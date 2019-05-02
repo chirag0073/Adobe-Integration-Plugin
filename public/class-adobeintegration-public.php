@@ -278,6 +278,10 @@ class Adobeintegration_Public {
 		  		include( plugin_dir_path( __FILE__ ) . 'partials/adobeintegration-public-lib-media.php' );
 		  		
 		  	}
+		  	else if(!empty($contentData1['message'])){
+		  	    echo $contentData1['message'];
+		  	}
+		  	    
 		  	else
 		  	{
 		  		echo 'Data could not be found!';	
