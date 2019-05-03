@@ -18,8 +18,8 @@ $contentData = json_decode($contentRes,true);
 $category_id=(isset($_POST['category_id']))?$_POST['category_id']:'1';
 
 ?>
-
-<div class="row adobintegration_content adobe_items media_container" data-type="media"  data-id="<?php echo $category_id;?>" >
+<div id="adobintegration_media" >
+<div class="row adobintegration_content adobe_items media_container" data-type="lib_media"  data-id="<?php echo $category_id;?>" >
 	<?php
 	foreach($contentData['files'] as $key => $data) {?>
 		<div class="col-md-2 col-lg-3 col-sm-3 col-xs-6">
@@ -34,7 +34,7 @@ $category_id=(isset($_POST['category_id']))?$_POST['category_id']:'1';
 
 								  // echo $data['thumbnail_html_tag']; ?>
 								<a href="<?php echo $data['thumbnail_1000_url'];?>" data-rel="prettyPhoto" title="<?php echo $data['title'];?>" data-thumbnail_url="<?php echo $data['thumbnail_1000_url'];?>" data-id="<?php echo $data['id'];?>" data-type="media" data-title="<?php echo $data['title'];?>"  data-stock_id="<?php echo $data['id'];?>" onclick="//get_media(this);">
-								<img class="lazy-load" data-src="<?php echo $data['thumbnail_1000_url']; ?>" data-srcset="<?php echo $data['thumbnail_1000_url']; ?>" >
+								<img class="lazy-load" src="<?php echo $data['thumbnail_1000_url']; ?>" data-src="<?php echo $data['thumbnail_1000_url']; ?>" data-srcset="<?php echo $data['thumbnail_1000_url']; ?>" >
 								</a>
 							</div>
 							<div class="fusion-product-content">
@@ -67,9 +67,10 @@ $category_id=(isset($_POST['category_id']))?$_POST['category_id']:'1';
 	} ?>
 
 </div>
+</div>
 <?php
 $offset=(isset($_POST['offset'])) ? ($_POST['offset']+$this->page_limit):'0';  
 ?>
 <script type="text/javascript">
-	adobeintegration.offset='<?php echo $offset; ?>';
+	adobeintegration.lib_offset='<?php echo $offset; ?>';
 </script>

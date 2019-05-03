@@ -109,7 +109,8 @@ class Adobeintegration_Public {
 					'plugin_name' =>$this->plugin_name,
 					'ajax_nonce' => wp_create_nonce( 'ajax_nonce' ),           
 					'plugin_url' =>plugins_url(),
-					'offset'=>0  					
+					'offset'=>0,
+					'lib_offset'=>0,
 				) );
 
 	}
@@ -161,7 +162,7 @@ class Adobeintegration_Public {
 		  	}
 		  	else
 		  	{
-		  		echo 'Data could not be found.';	
+		  		echo 'Data could not be found!';	
 		  	}
 	} 
 
@@ -187,7 +188,7 @@ class Adobeintegration_Public {
 		  	}
 		  	else
 		  	{
-		  		$return_data = array('status'=>'error','msg'=>__('Data could not be found.',$this->plugin_name));	
+		  		$return_data = array('status'=>'error','msg'=>__('Data could not be found!',$this->plugin_name));	
 		  	}
 
 			if($content)
@@ -231,7 +232,7 @@ class Adobeintegration_Public {
 		  	}
 		  	else
 		  	{
-		  		$return_data = array('status'=>'error','msg'=>__('Data could not be found.',$this->plugin_name));	
+		  		$return_data = array('status'=>'error','msg'=>__('Data could not be found!',$this->plugin_name));	
 		  	}
 
 			if($content)
