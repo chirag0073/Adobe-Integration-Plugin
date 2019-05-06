@@ -73,7 +73,7 @@
     align-content: center;
 }*/
 
-#adobintegration_media .adobintegration_content.adobe_items {
+#adobintegration_media .adobintegration_content.adobe_items, #adobintegration_lib_media .adobintegration_content.adobe_items {
     display: inline-flex;
     margin-bottom: 30px;
 }

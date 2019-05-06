@@ -187,6 +187,9 @@ class Adobeintegration {
 		$this->loader->add_action('wp_ajax_adobeintegration_api_get_media',$plugin_public,'adobeintegration_api_get_media');
 		$this->loader->add_action('wp_ajax_nopriv_adobeintegration_api_get_media',$plugin_public,'adobeintegration_api_get_media');
 
+		$this->loader->add_action('wp_ajax_adobeintegration_api_get_lib_media',$plugin_public,'adobeintegration_api_get_lib_media');
+		$this->loader->add_action('wp_ajax_nopriv_adobeintegration_api_get_lib_media',$plugin_public,'adobeintegration_api_get_lib_media');
+
 		$this->loader->add_action('wp_ajax_adobeintegration_create_product',$plugin_public,'adobeintegration_create_product');
 		$this->loader->add_action('wp_ajax_nopriv_adobeintegration_create_product',$plugin_public,'adobeintegration_create_product');
 

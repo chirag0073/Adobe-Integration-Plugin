@@ -18,21 +18,13 @@ $contentData = json_decode($contentRes,true);
 $category_id=(isset($_POST['category_id']))?$_POST['category_id']:'1';
 
 ?>
-<div id="adobintegration_media" >
-<div class="row adobintegration_content adobe_items media_container" data-type="lib_media"  data-id="<?php echo $category_id;?>" >
+<div class="row adobintegration_content adobe_items media_lib_container" data-type="lib_media"  data-id="<?php echo $category_id;?>" >
 	<?php
 	foreach($contentData['files'] as $key => $data) {?>
 		<div class="col-md-2 col-lg-3 col-sm-3 col-xs-6">
 				<div class="image_box">
 					
 							<div class="media_item">
-								<?php
-
-								// echo '<pre>';
-								// print_r($data);
-								// echo '</pre>';								
-
-								  // echo $data['thumbnail_html_tag']; ?>
 								<a href="<?php echo $data['thumbnail_1000_url'];?>" data-rel="prettyPhoto" title="<?php echo $data['title'];?>" data-thumbnail_url="<?php echo $data['thumbnail_1000_url'];?>" data-id="<?php echo $data['id'];?>" data-type="media" data-title="<?php echo $data['title'];?>"  data-stock_id="<?php echo $data['id'];?>" onclick="//get_media(this);">
 								<img class="lazy-load" src="<?php echo $data['thumbnail_1000_url']; ?>" data-src="<?php echo $data['thumbnail_1000_url']; ?>" data-srcset="<?php echo $data['thumbnail_1000_url']; ?>" >
 								</a>
@@ -62,15 +54,16 @@ $category_id=(isset($_POST['category_id']))?$_POST['category_id']:'1';
 				</div>
 		</div>
 	<?php 
-		if(($key+1)%4==0) echo '</div><div class="row adobintegration_content adobe_items">';
+		if(($key+1)%4==0) echo '</div><div class="row adobintegration_content adobe_items media_lib_container">';
 
 	} ?>
 
 </div>
-</div>
 <?php
-$offset=(isset($_POST['offset'])) ? ($_POST['offset']+$this->page_limit):'0';  
+$offset=(isset($_POST['offset'])) ? ($_POST['offset']+$this->page_limit):(count($contentData['files']));
+$do_infinite = ($contentData['nb_results'] <= $this->page_limit) ? 'false' : 'true' ;
 ?>
+<input type="hidden" name="do_lib_infinite" class="do_lib_infinite" value="<?php echo $do_infinite; ?>" />
 <script type="text/javascript">
 	adobeintegration.lib_offset='<?php echo $offset; ?>';
 </script>

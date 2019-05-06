@@ -32,11 +32,19 @@
 jQuery(window).scroll(function() {
     
     if(jQuery('#adobintegration_media').is(':visible')) {
-        
-        if(jQuery('.active div.media_container').length){
+        if(jQuery('.media_container').length){
             if(jQuery(window).scrollTop() + jQuery(window).height() >= jQuery(document).height()) {
-                
-            	get_media(jQuery('.media_container'),true);	
+            	get_media(jQuery('.active div.media_container'),true);	
+        
+            }
+        
+        }
+    }
+    
+    if(jQuery('#adobintegration_lib_media').is(':visible')) {
+        if(jQuery('.media_lib_container').length){
+            if(jQuery(window).scrollTop() + jQuery(window).height() >= jQuery(document).height()) {
+            	get_media(jQuery('.media_lib_container'),true);	
         
             }
         
@@ -71,6 +79,10 @@ function get_media(obj,infinteScroll)
 	var paramlink = '';
  	var action='';
  	var _offset=(adobeintegration.offset)?adobeintegration.offset:0;
+ 	var adobe_container = jQuery('#adobintegration_media');
+ 	
+ 	var do_infinte = 'true';
+ 	var do_infinte_container = jQuery('.do_infinite');
  	
  	if(breadcrumb=='yes'){
  	    adobeintegration.offset = 0;
@@ -79,7 +91,6 @@ function get_media(obj,infinteScroll)
  	if(jQuery(obj).data('type')=='subcategory'){
  	    
 		action = 'adobeintegration_api_get_subcategories';
-		console.log(infinteScroll);
 		if(infinteScroll==undefined){
 		    paramlink = '<a href="javascript:void(0)" data-id="'+id+'" data-name="'+name+'" data-type="'+type+'" data-breadcrumb="yes" onclick="get_media(this)">'+name+'</a>';
 		
@@ -90,6 +101,8 @@ function get_media(obj,infinteScroll)
  	else if(jQuery(obj).data('type')=='media')
  	{
  		action = 'adobeintegration_api_get_media';
+     	do_infinte = jQuery('.do_infinite').val();
+     	do_infinte_container = jQuery('.do_infinite');
  		
  		if(infinteScroll==undefined){
      		paramlink = '<a href="javascript:void(0)" data-id="'+id+'" data-name="'+name+'" data-type="'+type+'" data-breadcrumb="yes" onclick="get_media(this)">'+name+'</a>';
@@ -100,6 +113,9 @@ function get_media(obj,infinteScroll)
  	{
  		action = 'adobeintegration_api_get_lib_media';
  		_offset=(adobeintegration.lib_offset)?adobeintegration.lib_offset:0;
+ 		adobe_container = jQuery('#adobintegration_lib_media');
+ 		do_infinte = jQuery('.do_lib_infinite').val();
+ 		do_infinte_container = jQuery('.do_lib_infinite');
  		
  		if(infinteScroll==undefined){
      		paramlink = '<a href="javascript:void(0)" data-id="'+id+'" data-name="'+name+'" data-type="'+type+'" data-breadcrumb="yes" onclick="get_media(this)">'+name+'</a>';
@@ -107,42 +123,45 @@ function get_media(obj,infinteScroll)
  		}
  	}
 
-	if(id)
+	if(id && do_infinte == 'true')
 	{
-		ajax_loader();			
+	    ajax_loader();
 		jQuery.ajax({
-		  type: "POST",
-		  url: adobeintegration.ajax_url+'?action='+action,
-		  data: {'category_id':id,'offset':_offset},
-		  cache: false,
-		  success: function(result){
-
-		     	var res_json_obj = JSON.parse(result);
-
-		     	if(res_json_obj.status=='error'){
-		     		alert(res_json_obj.msg);
-		     		return;
-		     	}
-
-		     	if(_offset >= 20)
-		     	{
-		     	   if(breadcrumb=='yes')
-		     	    {
-		     	        jQuery('#adobintegration_media').empty().append(res_json_obj.data);
-		     	    }
-		     	    else
-		     	    {
-		     		    jQuery('#adobintegration_media').append(res_json_obj.data);
-		     	    }
-		     	}
-		     	else
-		     	{
-		     	    
-		     		jQuery('#adobintegration_media').empty().append(res_json_obj.data);
-		     	}
-		     	
-		     	ajax_loader();
-		  }
+            type: "POST",
+            url: adobeintegration.ajax_url+'?action='+action,
+            data: {'category_id':id,'offset':_offset, 'infinteScroll':infinteScroll },
+            cache: false,
+            success: function(result){
+             	var res_json_obj = JSON.parse(result);
+             	
+             	if(res_json_obj.status=='error'){
+             	    jQuery(do_infinte_container).val('false');
+             	}
+            
+             	if(res_json_obj.status=='error' || res_json_obj.status=='API error'){
+             		alert(res_json_obj.msg);
+             		ajax_loader();
+             		return;
+             	}
+            
+             	if(_offset >= 20)
+             	{
+             	   if(breadcrumb=='yes')
+             	    {
+             	        jQuery(adobe_container).empty().append(res_json_obj.data);
+             	    }
+             	    else
+             	    {
+             		    jQuery(adobe_container).append(res_json_obj.data);
+             	    }
+             	}
+             	else
+             	{
+             		jQuery(adobe_container).empty().append(res_json_obj.data);
+             	}
+             	
+             	ajax_loader();
+            }
 
 		});
 	}

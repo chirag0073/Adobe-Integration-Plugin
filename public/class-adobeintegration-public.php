@@ -248,13 +248,14 @@ class Adobeintegration_Public {
 	public function adobeintegration_api_get_lib_media()
 	{
 			$page_limit= $this->page_limit;
-			$post_offset = (isset($_POST['offset']) && !empty($_POST['offset']))?$_POST['offset']:0;
+			if(isset($_POST['limit'])){
+				$page_limit = $_POST['limit'];
+			}
+			$post_offset = (isset($_POST['offset']))?$_POST['offset']:0;
 
 			$params = array(
 						'locale'=>'en_US',
 						'result_columns[]'=>'thumbnail_1000_url',
-						//'result_columns[]'=>'thumbnail_1000_height',
-						//'result_columns[]'=>'thumbnail_1000_width',
 						'search_parameters[limit]'=>$page_limit,
 						'search_parameters[offset]'=>$post_offset
 						);
@@ -270,23 +271,46 @@ class Adobeintegration_Public {
 			  }
 		   	
 			$contentData1 = json_decode($contentRes,true);
-			/*echo "<pre>272";
-			print_r($contentData);die;*/
+		  	
+		  	if(isset($_POST['infinteScroll']) && $_POST['infinteScroll']){
 			
-		    if(!empty($contentData1['files']))
-		  	{
-		  		//include( plugin_dir_path( __FILE__ ) . 'partials/adobeintegration-public-categories.php' );
-		  		include( plugin_dir_path( __FILE__ ) . 'partials/adobeintegration-public-lib-media.php' );
-		  		
+    		    if(!empty($contentData1['files']))
+    		  	{
+    		  	    ob_start();
+    		  		include( plugin_dir_path( __FILE__ ) . 'partials/adobeintegration-public-lib-media.php' );
+    		  		$content = ob_get_clean();
+    		  	}
+    		  	else if(!empty($contentData1['message'])){
+    		  	    $return_data = array('status'=>'API error','msg'=>$contentData1['message']);
+    		  	}
+    		  	else
+    		  	{
+    		  		$return_data = array('status'=>'error','msg'=>__('Data could not be found!',$this->plugin_name));
+    		  	}
+    		  	if($content)
+    		  	{
+    		  		$return_data = array('status'=>'success','msg'=>__('Data is avilable.',$this->plugin_name),'data'=>$content);	
+    		  		
+    		  	}
+    
+    		    wp_die(json_encode($return_data));
 		  	}
-		  	else if(!empty($contentData1['message'])){
-		  	    echo $contentData1['message'];
+		  	else{
+			
+    		    if(!empty($contentData1['files']))
+    		  	{
+    		  		include( plugin_dir_path( __FILE__ ) . 'partials/adobeintegration-public-lib-media.php' );
+    		  	}
+    		  	else if(!empty($contentData1['message'])){
+    		  	    echo $contentData1['message'];
+    		  	}
+    		  	else
+    		  	{
+    		  		echo 'Data could not be found!';
+    		  	}
 		  	}
-		  	    
-		  	else
-		  	{
-		  		echo 'Data could not be found!';	
-		  	}
+		  	
+		  	
 	}
 
 	public function adobeintegration_create_product()

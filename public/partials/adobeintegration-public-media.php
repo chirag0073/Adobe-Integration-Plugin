@@ -67,8 +67,10 @@ $category_id=(isset($_POST['category_id']))?$_POST['category_id']:'1';
 
 </div>
 <?php
-$offset=(isset($_POST['offset'])) ? ($_POST['offset']+$this->page_limit):'0';  
+$offset=(isset($_POST['offset'])) ? ($_POST['offset']+$this->page_limit):'0';
+$do_infinite = ($contentData['nb_results'] <= $this->page_limit) ? 'false' : 'true' ;
 ?>
+<input type="hidden" name="do_infinite" class="do_infinite" value="<?php echo $do_infinite; ?>" />
 <script type="text/javascript">
 	adobeintegration.offset='<?php echo $offset; ?>';
 </script>

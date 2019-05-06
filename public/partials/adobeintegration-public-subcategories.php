@@ -35,3 +35,4 @@ if(($key+1)%4==0) echo '</div><div class="row adobintegration_content">';
 
 } ?>
 </div>
+<input type="hidden" name="do_infinite" class="do_infinite" value="true" />
